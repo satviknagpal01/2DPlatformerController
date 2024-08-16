@@ -28,8 +28,12 @@ public class ControllerStatsScriptable : ScriptableObject
     public float fallAcceleration;
     [Tooltip("Players max fall velocity")]
     public float maxFallSpeed;
+    [Tooltip("Buffer time between consecutive jumps")]
     public float jumpBuffer;
     public float jumpEndEarlyMultiplier;
     [Tooltip("Time buffer where player can jump after leaving the edge")]
     public float coyoteTime;
+
+    [Space(2), Header("Dash")]
+    public float dashVelocity;
 }   

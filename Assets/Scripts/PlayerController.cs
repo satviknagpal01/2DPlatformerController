@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     Vector2 _inputVelocity;
     Vector2 _currentVelocity;
     float _deceleration;
-    bool _grounded = true;
+    [SerializeField] bool _grounded = true;
     bool _inCoyoteTime = true;
     bool _jumpEndEarly;
 
@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
     float _time = 0;
     float _jumpPressTime = 0;
     float _jumpReleaseTime = 0;
+
+    bool _dashing;
+    bool _canDash;
 
     Collider2D _col;
     Rigidbody2D _rb;
@@ -38,6 +41,7 @@ public class PlayerController : MonoBehaviour
             _controller.Character.Walk.performed += i => _inputVelocity = i.ReadValue<Vector2>();
             _controller.Character.Jump.performed += i => { Jump(); };
             _controller.Character.Jump.canceled += i =>  { JumpEnd(); _jumpReleaseTime = _time; };
+            _controller.Character.Dash.performed += i => { Dash(); };
         }
         _controller.Enable();
     }
@@ -57,6 +61,7 @@ public class PlayerController : MonoBehaviour
     }
     void HorizontalVelocity()
     {
+        if(_dashing) return;
         if (Mathf.Abs(_inputVelocity.x) < stats.deadZone)
         {
             _deceleration = _grounded ? stats.groundDeceleration : stats.airDeceleration;
@@ -93,12 +98,38 @@ public class PlayerController : MonoBehaviour
     IEnumerator JumpRoutine()
     {
         float t = 0f;
-        while (t < 0.1f)
+        while (t < 0.1f && !_dashing)
         {
             t += Time.deltaTime;
             _currentVelocity.y = stats.jumpPower;    
             yield return null;
         }
+    }
+    void Dash()
+    {
+        if (_inputVelocity.magnitude > 0 && !_dashing && _canDash)
+        {
+            _canDash = false;
+            _dashing = true;
+            Vector2 _dir = _inputVelocity.normalized;
+            StartCoroutine(DashRoutine(_dir));
+        }
+    }
+    IEnumerator DashRoutine(Vector2 _dir)
+    {
+        float t = 0;
+        Vector2 initialVelocity = _rb.velocity;
+        _rb.velocity = Vector2.zero;
+        while (t < 0.01f && !_canDash)
+        {
+            t += Time.deltaTime;
+            _currentVelocity.x = stats.dashVelocity * _dir.x;
+            _currentVelocity.y = stats.dashVelocity * _dir.y;
+            _rb.velocity = _currentVelocity;
+            yield return null;
+        }
+        _rb.velocity = initialVelocity / 2;
+        _dashing = false;
     }
     void Gravity()
     {
@@ -130,6 +161,7 @@ public class PlayerController : MonoBehaviour
                 _inCoyoteTime = false;
                 _jumpEndEarly = false;
             }
+            _canDash = true;
         }
         else
         {

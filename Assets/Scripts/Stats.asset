@@ -16,14 +16,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   deadZone: 0.1
-  maxSpeed: 14
+  maxSpeed: 10
   acceleration: 100
   groundDeceleration: 85
   airDeceleration: 30
   jumpPower: 20
   groundingAcceleration: 2
   fallAcceleration: 120
-  maxFallSpeed: 50
+  maxFallSpeed: 30
   jumpBuffer: 0.2
   jumpEndEarlyMultiplier: 2.5
   coyoteTime: 0.15
+  dashVelocity: 35

@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>() ? GetComponent<Rigidbody2D>() : gameObject.AddComponent<Rigidbody2D>();
         _rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        _rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         _col = GetComponent<Collider2D>() ? GetComponent<Collider2D>() : gameObject.AddComponent<Collider2D>();
     }
 
@@ -54,7 +55,7 @@ public class PlayerController : MonoBehaviour
         _controller.Disable();
         StopAllCoroutines();
     }
-    private void Update()
+    private void FixedUpdate()
     {
         CheckGrounded();
         CheckCeiling();

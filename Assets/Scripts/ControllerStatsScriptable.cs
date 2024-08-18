@@ -36,4 +36,5 @@ public class ControllerStatsScriptable : ScriptableObject
 
     [Space(2), Header("Dash")]
     public float dashVelocity;
+    public float dashBuffer;
 }   

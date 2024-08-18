@@ -1,16 +1,17 @@
+using NaughtyAttributes;
 using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField, NaughtyAttributes.Expandable] ControllerStatsScriptable stats;
+    [SerializeField, Expandable] ControllerStatsScriptable stats;
 
     Vector2 _inputVelocity;
     Vector2 _currentVelocity;
     float _deceleration;
-    [SerializeField] bool _grounded = true;
+    [SerializeField, ReadOnly] bool _grounded = true;
     bool _inCoyoteTime = true;
-    bool _jumpEndEarly;
+    [SerializeField, ReadOnly] bool _jumpEndEarly;
 
     Coroutine _jumpCoroutine = null;
     Coroutine _coyoteCoroutine = null;
@@ -20,7 +21,10 @@ public class PlayerController : MonoBehaviour
     float _jumpReleaseTime = 0;
 
     bool _dashing;
-    bool _canDash;
+    [SerializeField, ReadOnly] bool _canDash;
+    float _dashedTime;
+
+    float _facingDirection = 1;
 
     Collider2D _col;
     Rigidbody2D _rb;
@@ -69,6 +73,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            _facingDirection = Mathf.CeilToInt(_inputVelocity.x);
             _currentVelocity.x = Mathf.MoveTowards(_currentVelocity.x, stats.maxSpeed * _inputVelocity.x, stats.acceleration * Time.deltaTime);
         }
         _rb.velocity = _currentVelocity;
@@ -107,20 +112,30 @@ public class PlayerController : MonoBehaviour
     }
     void Dash()
     {
-        if (_inputVelocity.magnitude > 0 && !_dashing && _canDash)
+        if (!_dashing && _canDash && stats.dashBuffer <= (_time - _dashedTime))
         {
-            _canDash = false;
+            _dashedTime = _time;
             _dashing = true;
-            Vector2 _dir = _inputVelocity.normalized;
-            StartCoroutine(DashRoutine(_dir));
+            _canDash = false;
+            _jumpEndEarly = false;
+            if (_inputVelocity.magnitude > 0)
+            {
+                Vector2 _dir = _inputVelocity.normalized;
+                StartCoroutine(DashRoutine(_dir));
+            }
+            else
+            {
+                Vector2 _dir = new Vector2(_facingDirection, 0);
+                StartCoroutine(DashRoutine(_dir));
+            }
         }
     }
     IEnumerator DashRoutine(Vector2 _dir)
     {
-        float t = 0;
         Vector2 initialVelocity = _rb.velocity;
         _rb.velocity = Vector2.zero;
-        while (t < 0.01f && !_canDash)
+        float t = 0;
+        while (t < 0.05f && !_canDash)
         {
             t += Time.deltaTime;
             _currentVelocity.x = stats.dashVelocity * _dir.x;
@@ -130,9 +145,11 @@ public class PlayerController : MonoBehaviour
         }
         _rb.velocity = initialVelocity / 2;
         _dashing = false;
+        if(_grounded) _canDash = true;
     }
     void Gravity()
     {
+        if(_dashing) return;
         if (_grounded && !_inCoyoteTime)
         {
             _currentVelocity.y = -stats.groundingAcceleration;
@@ -160,12 +177,13 @@ public class PlayerController : MonoBehaviour
                 _grounded = true;
                 _inCoyoteTime = false;
                 _jumpEndEarly = false;
+                _canDash = true;
             }
-            _canDash = true;
         }
         else
         {
-            _coyoteCoroutine ??= StartCoroutine(CoyoteTime());           
+            if(_dashing) _grounded = false;
+            else _coyoteCoroutine ??= StartCoroutine(CoyoteTime());           
         }
     }
     void CheckCeiling()

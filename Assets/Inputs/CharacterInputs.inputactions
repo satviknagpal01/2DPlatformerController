@@ -296,6 +296,17 @@
                 },
                 {
                     "name": "",
+                    "id": "a6d8991f-0dd8-471c-9476-db57aa3dc848",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c25bf3c5-6e36-4a73-a6bb-203d9dae7a1c",
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
@@ -353,6 +364,17 @@
                     "name": "",
                     "id": "f9559b45-8ba4-4f72-9fd2-945639ae8e51",
                     "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c62097f4-7bd2-49cc-9177-7cfef76709f3",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

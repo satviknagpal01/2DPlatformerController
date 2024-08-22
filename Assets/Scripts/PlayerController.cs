@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
         Vector2 initialVelocity = _rb.velocity;
         _rb.velocity = Vector2.zero;
         float t = 0;
-        while (t < 0.05f && !_canDash)
+        while (t < 0.05f && _dashing)
         {
             t += Time.deltaTime;
             _currentVelocity.x = stats.dashVelocity * _dir.x;
@@ -191,11 +191,12 @@ public class PlayerController : MonoBehaviour
     {
         if (Physics2D.CircleCast(_col.bounds.center, _col.bounds.size.x / 2, Vector2.up, _col.bounds.size.y / 2 - 0.15f, ~stats.playerLayer))
         {
-            if (_rb.velocity.y > 0)
+            if (_rb.velocity.y >= 0)
             {
                 _currentVelocity.y = Mathf.MoveTowards(_currentVelocity.y, 0, stats.fallAcceleration * Time.deltaTime);
                 JumpEnd();
                 _jumpEndEarly = true;
+                _dashing = false;
             }
         }
     }

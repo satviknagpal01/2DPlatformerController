@@ -20,12 +20,13 @@ MonoBehaviour:
   acceleration: 120
   groundDeceleration: 75
   airDeceleration: 25
-  jumpPower: 20
+  jumpPower: 25
   groundingAcceleration: 2
   fallAcceleration: 150
   maxFallSpeed: 50
   jumpBuffer: 0.2
   jumpEndEarlyMultiplier: 2
   coyoteTime: 0.1
-  dashVelocity: 40
+  maxJumpCount: 2
+  dashVelocity: 25
   dashBuffer: 0.7

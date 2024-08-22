@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     float _time = 0;
     float _jumpPressTime = 0;
     float _jumpReleaseTime = 0;
+    [SerializeField, ReadOnly] int _jumpCount = 0;
 
     bool _dashing;
     [SerializeField, ReadOnly] bool _canDash;
@@ -44,7 +45,7 @@ public class PlayerController : MonoBehaviour
         {
             _controller = new();
             _controller.Character.Walk.performed += i => _inputVelocity = i.ReadValue<Vector2>();
-            _controller.Character.Jump.performed += i => { Jump(); };
+            _controller.Character.Jump.performed += i => { HandleJump(); };
             _controller.Character.Jump.canceled += i =>  { JumpEnd(); _jumpReleaseTime = _time; };
             _controller.Character.Dash.performed += i => { Dash(); };
         }
@@ -79,15 +80,27 @@ public class PlayerController : MonoBehaviour
         }
         _rb.velocity = _currentVelocity;
     }
+    void HandleJump()
+    {
+        if (_jumpCount == 0)
+        {
+            if (_grounded && stats.jumpBuffer <= (_time - _jumpPressTime))
+            {
+                Jump();
+            }
+        }
+        else if(_jumpCount > 0 && _jumpCount < stats.maxJumpCount)
+        {
+            Jump();
+        }
+    }
     void Jump()
     {
-        if (_grounded && stats.jumpBuffer <= (_time - _jumpPressTime))
-        {
-            _jumpPressTime = _time;
-            _jumpEndEarly = false;
-            JumpEnd();
-            _jumpCoroutine = StartCoroutine(JumpRoutine());
-        }
+        _jumpPressTime = _time;
+        _jumpEndEarly = false;
+        JumpEnd();
+        _jumpCoroutine = StartCoroutine(JumpRoutine());
+        _jumpCount++;
     }
     void JumpEnd()
     {
@@ -179,6 +192,7 @@ public class PlayerController : MonoBehaviour
                 _inCoyoteTime = false;
                 _jumpEndEarly = false;
                 _canDash = true;
+                _jumpCount = 0;
             }
         }
         else

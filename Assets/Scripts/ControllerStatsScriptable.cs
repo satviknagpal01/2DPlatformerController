@@ -33,6 +33,7 @@ public class ControllerStatsScriptable : ScriptableObject
     public float jumpEndEarlyMultiplier;
     [Tooltip("Time buffer where player can jump after leaving the edge")]
     public float coyoteTime;
+    public int maxJumpCount;
 
     [Space(2), Header("Dash")]
     public float dashVelocity;

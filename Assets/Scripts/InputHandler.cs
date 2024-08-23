@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class InputHandler : MonoBehaviour
 {
@@ -10,7 +11,11 @@ public class InputHandler : MonoBehaviour
         if (player == null)
         {
             player = FindFirstObjectByType<PlayerController>();
-            Debug.LogError("Player not assigned, finding and adding player from scene");
+            if (player == null)
+            {
+                Debug.LogError("Player not found");
+                return;
+            }
         }
         if (_controller == null && player != null)
         {

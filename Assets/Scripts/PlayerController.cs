@@ -1,13 +1,22 @@
 using NaughtyAttributes;
+using System;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public interface IPlayerInterface
+{
+    public event Action Jumped;
+    public event Action<bool> Grounded;
+    public event Action Dashed;
+    public Vector2 PlayerVelocity { get; }
+}
+public class PlayerController : MonoBehaviour, IPlayerInterface
 {
     [SerializeField, Expandable] ControllerStatsScriptable stats;
 
     Vector2 _inputVelocity;
     public Vector2 InputVelocity {  get { return _inputVelocity; } set { _inputVelocity = value; } }
+
 
     Vector2 _currentVelocity;
     float _deceleration;
@@ -31,6 +40,11 @@ public class PlayerController : MonoBehaviour
 
     Collider2D _col;
     Rigidbody2D _rb;
+
+    public Vector2 PlayerVelocity => _inputVelocity;
+    public event Action Jumped;
+    public event Action<bool> Grounded;
+    public event Action Dashed;
 
     private void Awake()
     {
@@ -83,6 +97,7 @@ public class PlayerController : MonoBehaviour
     }
     void Jump()
     {
+        Jumped?.Invoke();
         _jumpPressTime = _time;
         _jumpEndEarly = false;
         JumpEnd();
@@ -120,6 +135,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!_dashing && _canDash && stats.dashBuffer <= (_time - _dashedTime))
         {
+            Dashed?.Invoke();
             _dashedTime = _time;
             _dashing = true;
             _canDash = false;
@@ -175,7 +191,7 @@ public class PlayerController : MonoBehaviour
     void CheckGrounded()
     {
         if (Physics2D.CircleCast(_col.bounds.center, _col.bounds.size.x / 2, Vector2.down, _col.bounds.size.y / 2 - stats.groundCheckRayOffset, ~stats.playerLayer))
-        { 
+        {
             if (_coyoteCoroutine != null && !_grounded)
             {
                 StopCoroutine(_coyoteCoroutine);
@@ -185,12 +201,21 @@ public class PlayerController : MonoBehaviour
                 _jumpEndEarly = false;
                 _canDash = true;
                 _jumpCount = 0;
+                Grounded?.Invoke(true);
             }
         }
         else
         {
-            if(_dashing) _grounded = false;
-            else _coyoteCoroutine ??= StartCoroutine(CoyoteTime());           
+            if (_dashing)
+            {
+                Grounded?.Invoke(false);
+                _grounded = false;
+            }
+            else if(_coyoteCoroutine == null)
+            {
+                _coyoteCoroutine = StartCoroutine(CoyoteTime());
+                Grounded?.Invoke(false);
+            }
         }
     }
     void CheckCeiling()

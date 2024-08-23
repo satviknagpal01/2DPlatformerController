@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Expandable] ControllerStatsScriptable stats;
 
     Vector2 _inputVelocity;
+    public Vector2 InputVelocity {  get { return _inputVelocity; } set { _inputVelocity = value; } }
+
     Vector2 _currentVelocity;
     float _deceleration;
     [SerializeField, ReadOnly] bool _grounded = true;
@@ -29,7 +31,6 @@ public class PlayerController : MonoBehaviour
 
     Collider2D _col;
     Rigidbody2D _rb;
-    CharacterInputs _controller;
 
     private void Awake()
     {
@@ -38,22 +39,8 @@ public class PlayerController : MonoBehaviour
         _rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         _col = GetComponent<Collider2D>() ? GetComponent<Collider2D>() : gameObject.AddComponent<Collider2D>();
     }
-
-    private void OnEnable()
-    {
-        if (_controller == null)
-        {
-            _controller = new();
-            _controller.Character.Walk.performed += i => _inputVelocity = i.ReadValue<Vector2>();
-            _controller.Character.Jump.performed += i => { HandleJump(); };
-            _controller.Character.Jump.canceled += i =>  { JumpEnd(); _jumpReleaseTime = _time; };
-            _controller.Character.Dash.performed += i => { Dash(); };
-        }
-        _controller.Enable();
-    }
     private void OnDisable()
     {
-        _controller.Disable();
         StopAllCoroutines();
     }
     private void FixedUpdate()
@@ -65,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
         _time += Time.deltaTime;
     }
-    void HorizontalVelocity()
+    public void HorizontalVelocity()
     {
         if(_dashing) return;
         if (Mathf.Abs(_inputVelocity.x) < stats.deadZone)
@@ -80,7 +67,7 @@ public class PlayerController : MonoBehaviour
         }
         _rb.velocity = _currentVelocity;
     }
-    void HandleJump()
+    public void HandleJump()
     {
         if (_jumpCount == 0)
         {
@@ -101,6 +88,11 @@ public class PlayerController : MonoBehaviour
         JumpEnd();
         _jumpCoroutine = StartCoroutine(JumpRoutine());
         _jumpCount++;
+    }
+    public void JumpReleased()
+    {
+        JumpEnd();
+        _jumpReleaseTime = _time;
     }
     void JumpEnd()
     {
@@ -124,7 +116,7 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
     }
-    void Dash()
+    public void Dash()
     {
         if (!_dashing && _canDash && stats.dashBuffer <= (_time - _dashedTime))
         {

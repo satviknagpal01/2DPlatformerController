@@ -46,24 +46,6 @@ public partial class @CharacterInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Attack"",
-                    ""type"": ""Button"",
-                    ""id"": ""056b32b4-4cb3-4c87-a2ba-6953e833ef94"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Interact"",
-                    ""type"": ""Button"",
-                    ""id"": ""7f1485ad-1f66-4558-b8ec-736235cbf567"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""f451b099-947e-49ec-92ea-e2fc6f47815c"",
@@ -329,50 +311,6 @@ public partial class @CharacterInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c25bf3c5-6e36-4a73-a6bb-203d9dae7a1c"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""253c7ea1-a65d-473f-bd09-2d5ff8a49597"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c99faead-fcc0-46b5-baea-a67b2bd4b52b"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""653474b9-9c1f-492b-be99-74532babc3f1"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""4214e52a-d283-4476-b84b-6816f052fc82"",
                     ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
@@ -413,8 +351,6 @@ public partial class @CharacterInputs: IInputActionCollection2, IDisposable
         m_Character = asset.FindActionMap("Character", throwIfNotFound: true);
         m_Character_Walk = m_Character.FindAction("Walk", throwIfNotFound: true);
         m_Character_Jump = m_Character.FindAction("Jump", throwIfNotFound: true);
-        m_Character_Attack = m_Character.FindAction("Attack", throwIfNotFound: true);
-        m_Character_Interact = m_Character.FindAction("Interact", throwIfNotFound: true);
         m_Character_Dash = m_Character.FindAction("Dash", throwIfNotFound: true);
     }
 
@@ -479,8 +415,6 @@ public partial class @CharacterInputs: IInputActionCollection2, IDisposable
     private List<ICharacterActions> m_CharacterActionsCallbackInterfaces = new List<ICharacterActions>();
     private readonly InputAction m_Character_Walk;
     private readonly InputAction m_Character_Jump;
-    private readonly InputAction m_Character_Attack;
-    private readonly InputAction m_Character_Interact;
     private readonly InputAction m_Character_Dash;
     public struct CharacterActions
     {
@@ -488,8 +422,6 @@ public partial class @CharacterInputs: IInputActionCollection2, IDisposable
         public CharacterActions(@CharacterInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Walk => m_Wrapper.m_Character_Walk;
         public InputAction @Jump => m_Wrapper.m_Character_Jump;
-        public InputAction @Attack => m_Wrapper.m_Character_Attack;
-        public InputAction @Interact => m_Wrapper.m_Character_Interact;
         public InputAction @Dash => m_Wrapper.m_Character_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
@@ -506,12 +438,6 @@ public partial class @CharacterInputs: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
-            @Interact.started += instance.OnInteract;
-            @Interact.performed += instance.OnInteract;
-            @Interact.canceled += instance.OnInteract;
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
@@ -525,12 +451,6 @@ public partial class @CharacterInputs: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
-            @Interact.started -= instance.OnInteract;
-            @Interact.performed -= instance.OnInteract;
-            @Interact.canceled -= instance.OnInteract;
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
@@ -555,8 +475,6 @@ public partial class @CharacterInputs: IInputActionCollection2, IDisposable
     {
         void OnWalk(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
-        void OnInteract(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
     }
 }

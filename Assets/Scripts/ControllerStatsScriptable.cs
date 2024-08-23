@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "ControllerStats", menuName = "New Controller Stats")]
 public class ControllerStatsScriptable : ScriptableObject
 {
     [Space]
@@ -20,6 +20,8 @@ public class ControllerStatsScriptable : ScriptableObject
     public float airDeceleration;
 
     [Space(2), Header("Jumps")]
+    [Tooltip("Numer of times player can jump")]
+    public int maxJumpCount;
     [Tooltip("Players jump velocity")]
     public float jumpPower;
     [Tooltip("Constante downward force applied while the player is grounded (helps with edges)")]
@@ -30,12 +32,14 @@ public class ControllerStatsScriptable : ScriptableObject
     public float maxFallSpeed;
     [Tooltip("Buffer time between consecutive jumps")]
     public float jumpBuffer;
+    [Tooltip("Extra downward multiplier that comes in effect if the jump key key is released early")]
     public float jumpEndEarlyMultiplier;
     [Tooltip("Time buffer where player can jump after leaving the edge")]
     public float coyoteTime;
-    public int maxJumpCount;
 
     [Space(2), Header("Dash")]
+    [Tooltip("Instantanious velocity player reaches while dashing")]
     public float dashVelocity;
+    [Tooltip("Buffer time between consecutive dashes")]
     public float dashBuffer;
 }   

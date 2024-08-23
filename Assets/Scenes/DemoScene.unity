@@ -1025,7 +1025,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0da05c3480da5f2418a7558c44f06a09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sprite: {fileID: 0}
+  _sprite: {fileID: 1585060315}
+  _animator: {fileID: 1585060316}
+  animatorSpeedkey: -596405980
+  jumpkey: 125937960
+  groundedkey: 862969536
 --- !u!1 &1689930971
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,9 +7,14 @@ public class InputHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_controller == null)
+        if (player == null)
         {
-            _controller = new();
+            player = FindFirstObjectByType<PlayerController>();
+            Debug.LogError("Player not assigned, finding and adding player from scene");
+        }
+        if (_controller == null && player != null)
+        {
+            _controller = new CharacterInputs();
             _controller.Character.Walk.performed += i => player.InputVelocity = i.ReadValue<Vector2>();
             _controller.Character.Jump.performed += i => { player.HandleJump(); };
             _controller.Character.Jump.canceled += i => { player.JumpReleased(); };

@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour
     }
     void CheckGrounded()
     {
-        if (Physics2D.CircleCast(_col.bounds.center, _col.bounds.size.x / 2, Vector2.down, _col.bounds.size.y / 2 - 0.15f, ~stats.playerLayer))
+        if (Physics2D.CircleCast(_col.bounds.center, _col.bounds.size.x / 2, Vector2.down, _col.bounds.size.y / 2 - stats.groundCheckRayOffset, ~stats.playerLayer))
         { 
             if (_coyoteCoroutine != null && !_grounded)
             {
@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
     }
     void CheckCeiling()
     {
-        if (Physics2D.CircleCast(_col.bounds.center, _col.bounds.size.x / 2, Vector2.up, _col.bounds.size.y / 2 - 0.15f, ~stats.playerLayer))
+        if (Physics2D.CircleCast(_col.bounds.center, _col.bounds.size.x / 2, Vector2.up, _col.bounds.size.y / 2 - stats.groundCheckRayOffset, ~stats.playerLayer))
         {
             if (_rb.velocity.y >= 0)
             {

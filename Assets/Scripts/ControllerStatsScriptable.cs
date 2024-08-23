@@ -6,6 +6,8 @@ public class ControllerStatsScriptable : ScriptableObject
     [Space]
     [Tooltip("Players layer mask to ignore in raycast")]
     public LayerMask playerLayer;
+    [Tooltip("Offset of the ground detection ray needed in so that ray extends beyond the player collider")]
+    public float groundCheckRayOffset;
     [Tooltip("Configure input deadzone to deal with stick drift on controllers")]
     public float deadZone;
 

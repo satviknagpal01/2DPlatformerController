@@ -15,18 +15,20 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  groundCheckRayOffset: -0.1
   deadZone: 0.1
+  debug: 0
   maxSpeed: 12
   acceleration: 120
   groundDeceleration: 75
   airDeceleration: 25
-  jumpPower: 25
+  maxJumpCount: 2
+  jumpPower: 20
   groundingAcceleration: 2
   fallAcceleration: 150
   maxFallSpeed: 50
   jumpBuffer: 0.2
   jumpEndEarlyMultiplier: 2
   coyoteTime: 0.1
-  maxJumpCount: 2
-  dashVelocity: 25
+  dashVelocity: 30
   dashBuffer: 0.7

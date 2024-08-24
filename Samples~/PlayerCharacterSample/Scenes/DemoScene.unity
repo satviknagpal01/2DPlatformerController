@@ -433,10 +433,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: d3540dc19caf3264b9b5396db4271127, type: 2}
+  _inputVelocity: {x: 0, y: 0}
+  _currentVelocity: {x: 0, y: 0}
+  _deceleration: 0
   _grounded: 1
+  _inCoyoteTime: 1
   _jumpEndEarly: 0
+  _time: 0
+  _jumpPressTime: 0
+  _jumpReleaseTime: 0
   _jumpCount: 0
+  _dashing: 0
   _canDash: 0
+  _dashedTime: 0
+  _facingDirection: 1
+  _col: {fileID: 0}
+  _rb: {fileID: 0}
 --- !u!50 &420397193
 Rigidbody2D:
   serializedVersion: 4
@@ -496,7 +508,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.25}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -507,8 +519,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.7}
-  m_EdgeRadius: 0.2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0.02
 --- !u!114 &420397195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,6 +643,7 @@ MonoBehaviour:
   defaultStats:
     _magnitude: 0.025
     _duration: 0.2
+  originalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &856280859
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,7 +948,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.25, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 420397190}
@@ -981,7 +994,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -584994975, guid: 3fa92ed6ece36c54794a777d8cb91925, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1002,7 +1015,7 @@ Animator:
   m_GameObject: {fileID: 1585060313}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 847895e704e11534ba0d83153cb765e1, type: 2}
+  m_Controller: {fileID: 9100000, guid: 402f306b8d60dc54f85225a9e53b1f04, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

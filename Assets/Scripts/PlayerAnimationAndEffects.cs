@@ -77,7 +77,6 @@ public class PlayerAnimationAndEffects : MonoBehaviour
     }
     void Jumped()
     {
-        print("jumped");
         _animator.SetTrigger(jumpkey);
         _animator.ResetTrigger(groundedkey);
     }

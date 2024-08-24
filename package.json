@@ -1,11 +1,11 @@
 {
-  "name": "com.BoomerangStudios.2DPlatformerController",
+  "name": "com.boomerangstudios.2dplatformercontroller",
   "version": "0.0.1",
   "displayName": "2D Platformer Controller",
   "description": "This is a 2D platformer controller",
   "unity": "2019.1",
   "dependencies": {
-    "com.dbrizov.naughtyattributes": "2.1.4",
+    "com.dbrizov.naughtyattributes": "https://github.com/dbrizov/NaughtyAttributes.git#upm"
  },
  "keywords": [
     "controller",

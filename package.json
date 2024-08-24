@@ -9,8 +9,10 @@
  },
  "keywords": ["controller", "platformer"],
   "samples":[
+    {
       "displayName": "Player Character movement sample",
       "description": "Demonstrates the 2d player character movement and how to set it up",
       "path": "Samples~/Scenes/PlayerCharacterSample"
+      }
   ]
 }

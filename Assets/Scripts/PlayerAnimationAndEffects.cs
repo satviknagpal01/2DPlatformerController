@@ -7,7 +7,9 @@ using UnityEngine;
 public class PlayerAnimationAndEffects : MonoBehaviour
 {
     [SerializeField] SpriteRenderer _sprite;
+    [SerializeField] Transform _camTarget;
     [SerializeField] Animator _animator;
+    [SerializeField] CameraShakeStats dashShake;
 
     [AnimatorParam("_animator")]
     public int animatorSpeedkey;
@@ -16,6 +18,8 @@ public class PlayerAnimationAndEffects : MonoBehaviour
     [AnimatorParam("_animator")]
     public int groundedkey;
 
+    float _goingBackTime;
+    Vector3 _camTargetPos;
     private IPlayerInterface _player;
 
     private void Awake()
@@ -39,6 +43,7 @@ public class PlayerAnimationAndEffects : MonoBehaviour
         {
             Debug.LogError("Player script not found in parent");
         }
+        _camTargetPos = _camTarget.localPosition;
     }
 
     private void OnEnable()
@@ -73,7 +78,21 @@ public class PlayerAnimationAndEffects : MonoBehaviour
     }
     void HandleSpriteFlip()
     {
-        if (_player.PlayerVelocity.x != 0) _sprite.flipX = _player.PlayerVelocity.x < 0;
+        if (_player.PlayerVelocity.x != 0)
+        {
+            _sprite.flipX = _player.PlayerVelocity.x < 0;
+            HandleCameraTarget();            
+        }
+    }
+    void HandleCameraTarget()
+    {
+        _goingBackTime += _player.PlayerVelocity.x * Time.deltaTime;
+        _goingBackTime = Mathf.Clamp(_goingBackTime, -1, 1);
+        if (Mathf.Abs(_goingBackTime) >= 1)
+        {
+            Vector3 targetPos = Vector3.MoveTowards(_camTarget.localPosition, _camTargetPos * _player.PlayerVelocity.x, 5 * Time.deltaTime);
+            _camTarget.localPosition = targetPos;
+        }
     }
     void Jumped()
     {
@@ -87,6 +106,6 @@ public class PlayerAnimationAndEffects : MonoBehaviour
     }
     void Dashed()
     {
-
+        CameraShake.instance.ShakeDirectional(_player.PlayerVelocity, dashShake);
     }
 }

@@ -38,28 +38,31 @@ public class CameraShake : MonoBehaviour
     [Button]
     public void Shake()
     {
-        Shake(defaultStats._magnitude, defaultStats._duration);
+        ShakeDirectional(Vector2.one, defaultStats);
     }
-    public void Shake(float magnitude, float duration)
+    public void Shake(CameraShakeStats stats)
+    {
+        ShakeDirectional(Vector2.one, stats);
+    }
+    public void ShakeDirectional(Vector2 direction, CameraShakeStats stats)
     {
         if (coroutine != null)
         {
             StopCoroutine(coroutine);
             coroutine = null;
         }
-        coroutine = StartCoroutine(ShakeCoroutine(magnitude, duration));
+        Vector2 dir = direction + Random.insideUnitCircle / 10;
+        coroutine = StartCoroutine(ShakeCoroutine(dir, stats));
     }
-    IEnumerator ShakeCoroutine(float magnitude, float duration)
+    IEnumerator ShakeCoroutine(Vector2 direction, CameraShakeStats stats)
     {
         originalPos = targetCamera.transform.localPosition;
         float elapsed = 0.0f;
-
-        while (elapsed < duration)
+        while (elapsed < stats._duration)
         {
-            float x = Random.Range(-1f, 1f) * magnitude;
-            float y = Random.Range(-1f, 1f) * magnitude;
+            Vector2 shake = stats._magnitude * direction * Random.insideUnitCircle;
 
-            targetCamera.transform.localPosition = new Vector3(x, y, originalPos.z);
+            targetCamera.transform.localPosition = new Vector3(shake.x, shake.y, originalPos.z);
 
             elapsed += Time.deltaTime;
 

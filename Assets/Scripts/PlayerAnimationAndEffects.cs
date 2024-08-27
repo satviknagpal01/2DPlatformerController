@@ -1,7 +1,4 @@
 using NaughtyAttributes;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class PlayerAnimationAndEffects : MonoBehaviour
@@ -17,6 +14,9 @@ public class PlayerAnimationAndEffects : MonoBehaviour
     public int jumpkey;
     [AnimatorParam("_animator")]
     public int groundedkey;
+
+    public float _cameraTargetSwitchTime = 1f;
+    public float _cameraTargetSwitchSpeed = 10f;
 
     float _goingBackTime;
     Vector3 _camTargetPos;
@@ -87,10 +87,10 @@ public class PlayerAnimationAndEffects : MonoBehaviour
     void HandleCameraTarget()
     {
         _goingBackTime += _player.PlayerVelocity.x * Time.deltaTime;
-        _goingBackTime = Mathf.Clamp(_goingBackTime, -1, 1);
-        if (Mathf.Abs(_goingBackTime) >= 1)
+        _goingBackTime = Mathf.Clamp(_goingBackTime, -_cameraTargetSwitchTime, _cameraTargetSwitchTime);
+        if (Mathf.Abs(_goingBackTime) >= _cameraTargetSwitchTime)
         {
-            Vector3 targetPos = Vector3.MoveTowards(_camTarget.localPosition, _camTargetPos * _player.PlayerVelocity.x, 5 * Time.deltaTime);
+            Vector3 targetPos = Vector3.MoveTowards(_camTarget.localPosition, _camTargetPos * _player.PlayerVelocity.x, _cameraTargetSwitchSpeed * Time.deltaTime);
             _camTarget.localPosition = targetPos;
         }
     }
